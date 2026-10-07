@@ -19,7 +19,7 @@ export function IdeaRow({ idea }: { idea: ContentItem }) {
         {idea.description && <p className="mt-1 line-clamp-2 text-[13.5px] text-muted">{idea.description}</p>}
         <div className="mt-1.5 text-[12px] text-muted">{hook ? "Hook" : "Idea"} · {timeAgo(idea.createdAt)}</div>
       </Link>
-      <button type="button" aria-label={`Delete ${idea.title}`} onClick={() => setDel(true)} className="grid size-8 shrink-0 place-items-center rounded-lg text-muted opacity-0 transition hover:bg-wash-strong hover:text-status-overdue focus:opacity-100 group-hover:opacity-100"><Trash2 className="size-4" /></button>
+      <button type="button" aria-label={`Delete ${idea.title}`} onClick={() => setDel(true)} className="grid size-8 shrink-0 place-items-center rounded-lg text-muted opacity-0 transition hover:bg-wash-strong hover:text-status-overdue focus:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100"><Trash2 className="size-4" /></button>
       <ConfirmDialog open={del} onOpenChange={setDel} title="Delete this?" description={`"${idea.title}" will be removed permanently.`} onConfirm={() => { hub.deleteItem(idea.id); toast.success("Deleted"); }} />
     </li>
   );
