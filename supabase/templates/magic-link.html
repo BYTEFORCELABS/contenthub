@@ -1,5 +1,5 @@
 <!-- Supabase → Authentication → Emails → Magic Link
-     Subject: {{ .Token }} is your Cyberzik Content Hub sign-in code
+     Subject: {{ .Token }} is your Cyberzik Content Hub code
      Paste everything below this comment into the "Message body" box, replacing what is there. -->
 <!doctype html>
 <html lang="en">
@@ -7,67 +7,63 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light only">
-  <title>Your Cyberzik Content Hub sign-in code</title>
+  <meta name="supported-color-schemes" content="light only">
+  <title>Your Cyberzik Content Hub code</title>
 </head>
-<body style="margin:0;padding:0;background:#fbf5e9;">
-  <!-- Inbox preview line -->
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Your code is {{ .Token }}. It expires in a few minutes.</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fbf5e9;">
+<body style="margin:0;padding:0;background:#ffffff;">
+  <!-- Preview text shown beside the subject in the inbox -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#ffffff;">Your code is {{ .Token }}. It expires in a few minutes.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
     <tr>
       <td align="center" style="padding:40px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;">
-          <!-- Logo -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:440px;">
+
           <tr>
-            <td align="center" style="padding:0 0 24px;">
-              <img src="https://contenthub.cyberziktechnologies.online/brand/cyberzik_full_colour.png" width="150" height="70" alt="CYBERZIK Technologies" style="display:block;border:0;width:150px;height:auto;">
+            <td style="padding:0 0 28px;">
+              <img src="https://contenthub.cyberziktechnologies.online/brand/cyberzik_full_colour.png" width="120" alt="Cyberzik" style="display:block;border:0;width:120px;height:auto;">
             </td>
           </tr>
-          <!-- Card -->
+
           <tr>
-            <td style="background:#ffffff;border:1px solid #eadfcc;border-radius:16px;overflow:hidden;">
+            <td style="font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;">
+              <h1 style="margin:0;font-size:24px;line-height:1.25;font-weight:700;color:#1f1b18;">Here's your code</h1>
+              <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#6d6863;">Type this into the Content Hub to sign in.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:24px 0;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr><td style="height:5px;background:#5e2b00;line-height:5px;font-size:0;">&nbsp;</td></tr>
                 <tr>
-                  <td style="padding:32px 32px 8px;font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;">
-                    <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#91501a;">Cyberzik Content Hub</p>
-                    <h1 style="margin:0 0 10px;font-size:22px;line-height:1.3;font-weight:700;color:#5e2b00;">Your sign-in code</h1>
-                    <p style="margin:0;font-size:14px;line-height:1.6;color:#6b5b4d;">Enter this code on the sign-in page. It works once and expires in a few minutes.</p>
-                  </td>
-                </tr>
-                <!-- Code -->
-                <tr>
-                  <td style="padding:24px 32px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center" style="background:#fbf5e9;border:1px dashed #d9c6a5;border-radius:12px;padding:20px 8px;">
-                          <span style="font-family:'Courier New',Courier,monospace;font-size:34px;line-height:1;font-weight:700;letter-spacing:8px;color:#5e2b00;-webkit-user-select:all;user-select:all;">{{ .Token }}</span>
-                          <p style="margin:12px 0 0;font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;font-size:12px;line-height:1.6;color:#91501a;">Tap and hold the code to copy it.<br>On iPhone and Mac it also appears above the keyboard on the sign-in page.</p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:0 32px 32px;font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #f0e6d6;">
-                      <tr>
-                        <td style="padding-top:18px;font-size:12.5px;line-height:1.6;color:#6b5b4d;">
-                          <b style="color:#241a12;">Did not try to sign in?</b> You can ignore this email. Nobody can open the Content Hub without this code. Never share it, not even with CYBERZIK staff.
-                        </td>
-                      </tr>
-                    </table>
+                  <td align="center" style="background:#f6f5f4;border-radius:14px;padding:26px 12px;">
+                    <span style="font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;font-size:40px;line-height:1;font-weight:700;letter-spacing:10px;color:#5e2b00;-webkit-user-select:all;user-select:all;">{{ .Token }}</span>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-          <!-- Footer -->
+
           <tr>
-            <td align="center" style="padding:20px 16px 0;font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;font-size:11px;line-height:1.6;color:#91501a;">
-              CYBERZIK TECHNOLOGIES · Technology • AI • Software • Intelligent Systems<br>
-              <span style="color:#6b5b4d;">Sent to {{ .Email }} because a sign-in was requested for the Cyberzik Content Hub.</span>
+            <td style="font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;font-size:14px;line-height:1.6;color:#6d6863;">
+              The code works once and expires in a few minutes.<br>
+              If you didn't ask for it, just ignore this email. Nobody can get in without the code.
             </td>
           </tr>
+
+          <tr>
+            <td style="padding-top:32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #ebe9e7;">
+                <tr>
+                  <td style="padding-top:16px;font-family:Futura,'Futura PT','Century Gothic','Trebuchet MS',Arial,sans-serif;font-size:12px;line-height:1.6;color:#8f8a85;">
+                    Cyberzik Technologies · Content Hub<br>
+                    Sent to {{ .Email }}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
         </table>
       </td>
     </tr>

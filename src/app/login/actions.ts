@@ -33,7 +33,7 @@ export async function verifyCode(prev: LoginState, form: FormData): Promise<Logi
   if (form.get("intent") === "back") return { step: "email", email: prev.email, error: null, info: null };
   if (form.get("intent") === "resend") { const f = new FormData(); f.set("email", prev.email); return sendCode(prev, f); }
   const token = String(form.get("code") ?? "").replace(/\s/g, "");
-  if (!/^\d{6,10}$/.test(token)) return { ...prev, error: "Enter the code from the email (numbers only).", info: null };
+  if (!/^\d{6}$/.test(token)) return { ...prev, error: "Enter the 6-digit code from the email.", info: null };
   const { data, error } = await (await supabaseServer()).auth.verifyOtp({ email: prev.email, token, type: "email" });
   if (error || !data.user) return { ...prev, error: "That code is wrong or has expired. Check the latest email, or send a new code.", info: null };
   redirect("/");
