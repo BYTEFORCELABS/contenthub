@@ -34,7 +34,7 @@ begin
 end $$;
 
 -- Who may sign in. Add teammates with: insert into members (email) values ('name@example.com');
-insert into members (email) values ('isaac@symphome.com');
+insert into members (email) values ('isaacchukwuka67@gmail.com'), ('cyberzikk1@gmail.com');
 
 -- The five starting content pillars (editable in the app under Settings).
 insert into pillars (id, data) values

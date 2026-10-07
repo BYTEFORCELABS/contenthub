@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { AppShell } from "@/components/shell/app-shell";
+import { THEME_SCRIPT } from "@/components/shell/theme";
 import { HubProvider } from "@/lib/store";
 import { loadState } from "@/lib/persist";
 
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const initial = await loadState();
   return (
-    <html lang="en-GB">
+    <html lang="en-GB" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} /></head>
       <body className="min-h-dvh">
         {initial ? <HubProvider initial={initial}><AppShell>{children}</AppShell></HubProvider> : children}
         <Toaster position="bottom-right" toastOptions={{ classNames: {
