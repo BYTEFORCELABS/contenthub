@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/*
+ * Futura where the device has it (Macs, iPhones). Elsewhere, and on the
+ * server that makes PDFs, Jost: a free Futura-style typeface (SIL Open Font
+ * Licence, public/fonts/Jost-OFL.txt), served from this app, not a font CDN.
+ */
+@font-face {
+  font-family: "Jost"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("/fonts/jost-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Jost"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("/fonts/jost-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/*
+ * CYBERZIK brand tokens (Brand Guidelines v1.0, 5 Sep 2026).
+ * The only brand colours. Components use these names, never raw hex.
+ * Light theme only, as in the Ledger (dark mode deferred until the cream-on-deep-brown lockup exists).
+ */
+:root {
+  --brand-deep: #5e2b00;
+  --brand-bronze: #91501a;
+  --brand-cream: #ffeeba;
+  --ink: #241a12;
+  --muted: #6b5b4d;
+  --wash: #fbf5e9;
+  --wash-strong: #f5ead3; /* hover tint of wash */
+  --page: #ffffff;
+  --hairline: rgb(107 91 77 / 0.16);
+  --hairline-strong: rgb(107 91 77 / 0.28);
+
+  /* PROVISIONAL functional status colours, pending owner approval.
+     Badges, alerts and chart semantics only. Always with text and an icon. */
+  --status-paid: #4e6a35;
+  --status-pending: #8a6a1f;
+  --status-overdue: #9a3a26;
+  --status-reconciled: #3d5c63;
+  --status-flagged: #8c4a2f;
+  --status-draft: #6b5b4d;
+  --status-void: #57514c;
+
+  /* Chart series: deep brown and a bronze tint (validated pair, see overview chart). */
+  --chart-1: #5e2b00;
+  --chart-2: #c9935f;
+
+  /* Futura for the app and its documents (owner's decision, 4 Oct 2026). */
+  --font-ui: Futura, "Futura PT", Jost, "Century Gothic", "Trebuchet MS", Arial, sans-serif;
+}
+
+@theme inline {
+  --color-deep: var(--brand-deep);
+  --color-bronze: var(--brand-bronze);
+  --color-cream: var(--brand-cream);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-wash: var(--wash);
+  --color-wash-strong: var(--wash-strong);
+  --color-page: var(--page);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-status-paid: var(--status-paid);
+  --color-status-pending: var(--status-pending);
+  --color-status-overdue: var(--status-overdue);
+  --color-status-reconciled: var(--status-reconciled);
+  --color-status-flagged: var(--status-flagged);
+  --color-status-draft: var(--status-draft);
+  --color-status-void: var(--status-void);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --font-sans: var(--font-ui);
+}
+
+html, body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+body { -webkit-font-smoothing: antialiased; }
+
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+
+@layer base {
+  :focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
+}
+
+/* ---------- Motion: short, quiet, and off for people who ask for less ---------- */
+@keyframes cz-fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes cz-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cz-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes cz-slide-in { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes cz-grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes cz-grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes cz-shimmer { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+
+.cz-page { animation: cz-fade-up 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cz-stagger > * { animation: cz-fade-up 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cz-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.cz-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.cz-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.cz-stagger > *:nth-child(5) { animation-delay: 160ms; }
+.cz-stagger > *:nth-child(6) { animation-delay: 200ms; }
+.cz-stagger > *:nth-child(n+7) { animation-delay: 240ms; }
+.cz-overlay[data-state="open"] { animation: cz-fade 160ms ease-out both; }
+.cz-dialog[data-state="open"] { animation: cz-pop 200ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cz-drawer[data-state="open"] { animation: cz-slide-in 240ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cz-bar { transform-origin: bottom; animation: cz-grow-y 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.cz-hbar { transform-origin: left; animation: cz-grow-x 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.skeleton {
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--wash) 0%, var(--wash-strong) 40%, var(--wash) 80%);
+  background-size: 300% 100%;
+  animation: cz-shimmer 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
+}
+
