@@ -32,7 +32,7 @@ export function TrendChart({ data }: { data: Bucket[] }) {
       {table ? (
         <div className="max-h-[260px] overflow-auto">
           <table className="w-full text-[13px]">
-            <thead className="sticky top-0 bg-page"><tr className="text-[11px] uppercase tracking-[0.12em] text-muted"><th className="py-2 text-left">Period</th><th className="py-2 text-right">Reach</th><th className="py-2 text-right">Engagements</th></tr></thead>
+            <thead className="sticky top-0 bg-page"><tr className="text-[11px] text-muted"><th className="py-2 text-left">Period</th><th className="py-2 text-right">Reach</th><th className="py-2 text-right">Engagements</th></tr></thead>
             <tbody>{data.map((d) => <tr key={d.label} className="border-t border-hairline"><td className="py-2">{d.label}</td><td className="num py-2 text-right">{d.reach.toLocaleString("en-GB")}</td><td className="num py-2 text-right">{d.engagements.toLocaleString("en-GB")}</td></tr>)}</tbody>
           </table>
         </div>

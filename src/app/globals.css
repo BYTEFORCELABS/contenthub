@@ -25,13 +25,13 @@
   --brand-deep: #5e2b00;
   --brand-bronze: #91501a;
   --brand-cream: #ffeeba;
-  --ink: #241a12;
-  --muted: #6b5b4d;
-  --wash: #fbf5e9;
-  --wash-strong: #f5ead3; /* hover tint of wash */
+  --ink: #1f1b18;
+  --muted: #6d6863;
+  --wash: #f8f8f7;
+  --wash-strong: #f0efee; /* hover tint of wash */
   --page: #ffffff;
-  --hairline: rgb(107 91 77 / 0.16);
-  --hairline-strong: rgb(107 91 77 / 0.28);
+  --hairline: rgb(31 27 24 / 0.08);
+  --hairline-strong: rgb(31 27 24 / 0.16);
 
   /* PROVISIONAL functional status colours, pending owner approval.
      Badges, alerts and chart semantics only. Always with text and an icon. */
@@ -83,7 +83,7 @@ body { -webkit-font-smoothing: antialiased; }
 
 .num { font-variant-numeric: tabular-nums; }
 .eyebrow {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  font-size: 12.5px; font-weight: 500; color: var(--muted);
 }
 
 @layer base {

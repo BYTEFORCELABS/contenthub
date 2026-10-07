@@ -46,7 +46,7 @@ export function AllContent() {
           action={s.items.length ? "Clear filters" : "+ Add Idea"} onAction={s.items.length ? f.clear : () => uiActions.openIdea()} />
       ) : (
         <div className="overflow-hidden rounded-xl border border-hairline bg-page">
-          <div className={cn("hidden gap-3 border-b border-hairline bg-wash/70 px-4 py-2.5 text-[11.5px] font-bold uppercase tracking-[0.12em] text-muted lg:grid", cols)}>
+          <div className={cn("hidden gap-3 border-b border-hairline bg-wash/70 px-4 py-2.5 text-[12.5px] font-medium text-muted lg:grid", cols)}>
             {th("title", "Title")}{th("status", "Status")}<span>Platforms</span><span>Pillar</span>{th("priority", "Priority")}{th("date", "Date")}<span className="sr-only">Assignee</span>
           </div>
           <ul className="divide-y divide-hairline">

@@ -46,8 +46,8 @@ export function useFilters(initial: Partial<Filters> = {}) {
 const sel = "h-8 w-auto min-w-0 max-w-[10.5rem] py-0 text-[12.5px] font-bold";
 
 /** Search box plus the eight filters. `hide` drops filters that a page already fixes (for example status on the Ideas page). */
-export function FilterBar({ state, filters, set, clear, active, hide = [], placeholder = "Search title, tag, platform…", count }: {
-  state: HubState; filters: Filters; set: (p: Partial<Filters>) => void; clear: () => void; active: number; hide?: (keyof Filters)[]; placeholder?: string; count?: string;
+export function FilterBar({ state, filters, set, clear, active, hide = [], collapsible, placeholder = "Search title, tag, platform…", count }: {
+  state: HubState; filters: Filters; set: (p: Partial<Filters>) => void; clear: () => void; active: number; hide?: (keyof Filters)[]; collapsible?: boolean; placeholder?: string; count?: string;
 }) {
   const show = (k: keyof Filters) => !hide.includes(k);
   const [open, setOpen] = useState(false);
@@ -57,8 +57,8 @@ export function FilterBar({ state, filters, set, clear, active, hide = [], place
         <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted" />
         <Input value={filters.q} onChange={(e) => set({ q: e.target.value })} placeholder={placeholder} aria-label="Filter by text" className="h-8 pl-8 text-[13px]" />
       </div>
-      <Button variant="outline" className="h-8 px-2.5 text-[12.5px] sm:hidden" aria-expanded={open} onClick={() => setOpen(!open)}><SlidersHorizontal />Filters{active > 0 && ` (${active})`}</Button>
-      <div className={cn("w-full flex-wrap items-center gap-2 sm:contents", open ? "flex" : "hidden sm:contents")}>
+      <Button variant="outline" className={cn("h-8 px-2.5 text-[12.5px]", !collapsible && "sm:hidden")} aria-expanded={open} onClick={() => setOpen(!open)}><SlidersHorizontal />Filters{active > 0 && ` (${active})`}</Button>
+      <div className={cn("w-full flex-wrap items-center gap-2", !collapsible && "sm:contents", open ? "flex" : collapsible ? "hidden" : "hidden sm:contents")}>
       {show("status") && <Select aria-label="Status" className={sel} value={filters.status} onChange={(e) => set({ status: e.target.value })}><option value="">Status</option>{STATUSES.map((s) => <option key={s} value={s}>{STATUS_META[s].label}</option>)}</Select>}
       {show("platform") && <Select aria-label="Platform" className={sel} value={filters.platform} onChange={(e) => set({ platform: e.target.value })}><option value="">Platform</option>{PLATFORMS.map((p) => <option key={p} value={p}>{PLATFORM_META[p].label}</option>)}</Select>}
       {show("pillar") && <Select aria-label="Content pillar" className={sel} value={filters.pillar} onChange={(e) => set({ pillar: e.target.value })}><option value="">Pillar</option>{state.pillars.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</Select>}

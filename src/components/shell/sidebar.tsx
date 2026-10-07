@@ -17,15 +17,15 @@ export function NavList({ onNavigate }: { onNavigate?: () => void }) {
     <nav className="flex flex-col gap-1 px-3" aria-label="Main">
       {NAV.map((g) => (
         <div key={g.key} className={g.label ? "mt-3" : undefined}>
-          {g.label && <div className="mb-1 px-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-ink/70">{g.label}</div>}
+          {g.label && <div className="mb-1 px-2.5 text-[12px] font-medium text-muted">{g.label}</div>}
           <ul className="flex flex-col gap-0.5">
             {g.items.map((i) => {
               const active = isActive(path, i.href);
               return (
                 <li key={i.href}>
                   <Link href={i.href} onClick={onNavigate} aria-current={active ? "page" : undefined}
-                    className={cn("group flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-[13.5px] transition-colors", active ? "bg-deep font-bold text-cream shadow-sm" : "text-ink/85 hover:bg-wash-strong hover:text-ink")}>
-                    <i.icon className={cn("size-4 shrink-0", active ? "text-cream" : "text-muted group-hover:text-deep")} />
+                    className={cn("group flex h-9 items-center gap-2.5 rounded-lg px-2.5 text-[13.5px] transition-colors", active ? "bg-wash-strong font-bold text-deep" : "text-ink/80 hover:bg-wash hover:text-ink")}>
+                    <i.icon className={cn("size-4 shrink-0", active ? "text-deep" : "text-muted group-hover:text-deep")} />
                     <span className="truncate">{i.label}</span>
                   </Link>
                 </li>
@@ -52,7 +52,7 @@ function Rail() {
                 <T.Root key={i.href}>
                   <T.Trigger asChild>
                     <Link href={i.href} aria-label={i.label} aria-current={active ? "page" : undefined}
-                      className={cn("grid size-10 place-items-center rounded-xl transition-colors", active ? "bg-deep text-cream shadow-sm" : "text-muted hover:bg-wash-strong hover:text-deep")}>
+                      className={cn("grid size-10 place-items-center rounded-xl transition-colors", active ? "bg-wash-strong text-deep" : "text-muted hover:bg-wash hover:text-deep")}>
                       <i.icon className="size-[18px]" />
                     </Link>
                   </T.Trigger>
@@ -68,7 +68,7 @@ function Rail() {
 }
 
 export function ProductMark() {
-  return <span className="mt-0.5 block pl-1 text-[10.5px] font-bold uppercase tracking-[0.28em] text-bronze">Content Hub</span>;
+  return <span className="mt-0.5 block pl-1 text-[10.5px] font-bold uppercase tracking-[0.2em] text-muted">Content Hub</span>;
 }
 
 const NAV_KEY = "cz-hub-nav";
@@ -86,7 +86,7 @@ export function Sidebar() {
     return () => window.removeEventListener("keydown", onKey);
   });
   return (
-    <aside className={cn("sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-hairline bg-wash transition-[width] duration-300 ease-out lg:flex", collapsed ? "w-[72px]" : "w-64")}>
+    <aside className={cn("sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-hairline bg-page transition-[width] duration-300 ease-out lg:flex", collapsed ? "w-[72px]" : "w-64")}>
       <div className={cn("flex items-center", collapsed ? "flex-col gap-1 px-2 pt-3" : "justify-between pl-3 pr-2 pt-2")}>
         <Link href="/" aria-label="Cyberzik Content Hub: Dashboard">
           {collapsed ? <BrandLogo width={36} /> : <div><BrandLogo width={132} priority /><ProductMark /></div>}
@@ -97,7 +97,6 @@ export function Sidebar() {
         </button>
       </div>
       <div className="mt-4 min-h-0 flex-1 overflow-y-auto pb-4">{collapsed ? <Rail /> : <NavList />}</div>
-      {!collapsed && <div className="border-t border-hairline px-4 py-3 text-[11.5px] text-muted">Cyberzik Technologies · Internal</div>}
     </aside>
   );
 }

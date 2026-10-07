@@ -12,7 +12,7 @@ export function PlatformTable({ rows }: { rows: ReturnType<typeof platformStats>
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[460px] text-[13px]">
-        <thead><tr className="text-[11px] uppercase tracking-[0.12em] text-muted"><th className="pb-2 text-left font-bold">Platform</th><th className="pb-2 text-right font-bold">Posts</th><th className="w-2/5 pb-2 pl-4 text-left font-bold">Reach</th><th className="pb-2 text-right font-bold">Engagement</th></tr></thead>
+        <thead><tr className="text-[11px] text-muted"><th className="pb-2 text-left font-bold">Platform</th><th className="pb-2 text-right font-bold">Posts</th><th className="w-2/5 pb-2 pl-4 text-left font-bold">Reach</th><th className="pb-2 text-right font-bold">Engagement</th></tr></thead>
         <tbody>{rows.map((r) => (
           <tr key={r.platform} className="border-t border-hairline">
             <td className="py-2.5"><PlatformBadge platform={r.platform} /></td>

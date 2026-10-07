@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ExternalLink, Trash2 } from "lucide-react";
 import { PlatformGlyph } from "@/components/platform";
 import { StatusBadge, TagChip } from "@/components/badges";
 import { ConfirmDialog } from "@/components/confirm";
@@ -29,12 +29,13 @@ const BRIEF: { key: keyof Brief; label: string; hint: string; rows: number }[] =
   { key: "notes", label: "Brief notes", hint: "References, constraints, tone.", rows: 3 },
 ];
 
-export function ContentWorkspace({ id }: { id: string }) {
+/** Full page at /content/[id], or `modal` inside the board's dialog (then onClose replaces navigation). */
+export function ContentWorkspace({ id, modal, onClose }: { id: string; modal?: boolean; onClose?: () => void }) {
   const s = useHub();
   const router = useRouter();
   const [del, setDel] = useState(false);
   const item = s.items.find((c) => c.id === id);
-  if (!item) return <Gone />;
+  if (!item) return modal ? null : <Gone />;
 
   const set = (patch: Partial<ContentItem>) => hub.updateItem(item.id, patch);
   const nextStatus = STATUSES[STATUSES.indexOf(item.status) + 1] as Status | undefined;
@@ -46,8 +47,9 @@ export function ContentWorkspace({ id }: { id: string }) {
   const limit = item.platforms.map((p) => LIMITS[p]).filter((n): n is number => !!n).reduce((a, b) => Math.min(a, b), Infinity);
 
   return (
-    <div className="mx-auto max-w-7xl">
-      <Link href="/board" className="mb-3 inline-flex items-center gap-1.5 text-[13px] font-bold text-bronze hover:text-deep"><ArrowLeft className="size-4" />Content board</Link>
+    <div className={modal ? undefined : "mx-auto max-w-7xl"}>
+      {modal ? <Link href={`/content/${item.id}`} className="mb-3 inline-flex items-center gap-1.5 text-[13px] font-bold text-bronze hover:text-deep"><ExternalLink className="size-4" />Open as full page</Link>
+        : <Link href="/board" className="mb-3 inline-flex items-center gap-1.5 text-[13px] font-bold text-bronze hover:text-deep"><ArrowLeft className="size-4" />Content board</Link>}
 
       <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 flex-1 basis-96">
@@ -131,7 +133,7 @@ export function ContentWorkspace({ id }: { id: string }) {
       </div>
 
       <ConfirmDialog open={del} onOpenChange={setDel} title="Delete this content?" description={`"${item.title}" and its brief, caption and checklist will be removed permanently.`}
-        onConfirm={() => { router.push("/content"); setTimeout(() => { hub.deleteItem(item.id); toast.success("Content deleted"); }, 50); }} />
+        onConfirm={() => { if (modal) { onClose?.(); hub.deleteItem(item.id); toast.success("Content deleted"); return; } router.push("/content"); setTimeout(() => { hub.deleteItem(item.id); toast.success("Content deleted"); }, 50); }} />
     </div>
   );
 }

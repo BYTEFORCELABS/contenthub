@@ -42,7 +42,7 @@ export function StatChips({ stats }: { stats: Stats }) {
   return (
     <dl className="flex flex-wrap gap-1.5">
       {STAT_FIELDS.map((f) => (
-        <div key={f.key} className="inline-flex items-baseline gap-1.5 rounded-md bg-wash px-2 py-1 ring-1 ring-inset ring-hairline">
+        <div key={f.key} className="inline-flex items-baseline gap-1.5 rounded-md bg-wash px-2 py-1">
           <dd className="num text-[13px] font-bold text-deep">{stats[f.key]}</dd><dt className="text-[11.5px] text-muted">{f.label}</dt>
         </div>
       ))}

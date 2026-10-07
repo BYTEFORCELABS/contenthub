@@ -1,50 +1,50 @@
 "use client";
 import { useState } from "react";
-import { Lightbulb, Plus } from "lucide-react";
-import { toast } from "sonner";
-import { IdeaCard } from "@/components/ideas/idea-card";
-import { FilterBar, applyFilters, useFilters } from "@/components/filters";
-import { EmptyState, PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
-import { Input, Select } from "@/components/ui/field";
-import { PRIORITY_META } from "@/lib/meta";
+import { Lightbulb, Search } from "lucide-react";
+import { Capture } from "@/components/ideas/capture";
+import { IdeaRow } from "@/components/ideas/idea-card";
+import { PageHeader } from "@/components/page-header";
+import { cn } from "@/lib/cn";
 import { ideas } from "@/lib/select";
-import { hub, useHub } from "@/lib/store";
-import { uiActions } from "@/lib/ui";
+import { useHub } from "@/lib/store";
+
+const TABS = [["all", "All"], ["idea", "Ideas"], ["hook", "Hooks"]] as const;
+
+/** Newest first. Used on Home (a short stream) and on the Ideas page (everything, searchable). */
+export function IdeaStream({ limit, showTools }: { limit?: number; showTools?: boolean }) {
+  const s = useHub();
+  const [tab, setTab] = useState<"all" | "idea" | "hook">("all");
+  const [q, setQ] = useState("");
+  const all = ideas(s.items);
+  const needle = q.trim().toLowerCase();
+  const list = all
+    .filter((i) => tab === "all" || (tab === "hook") === i.tags.includes("hook"))
+    .filter((i) => !needle || `${i.title} ${i.description}`.toLowerCase().includes(needle))
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, limit);
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-3 border-b border-hairline">
+        <div className="flex gap-5">
+          {TABS.map(([k, label]) => (
+            <button key={k} type="button" onClick={() => setTab(k)} className={cn("-mb-px border-b-2 pb-2.5 text-[14px] font-bold transition-colors", tab === k ? "border-deep text-deep" : "border-transparent text-muted hover:text-ink")}>{label}</button>
+          ))}
+        </div>
+        {showTools && <label className="mb-2 flex h-9 items-center gap-2 rounded-lg bg-wash px-3 text-muted"><Search className="size-4" /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search" aria-label="Search ideas" className="w-32 bg-transparent text-[13.5px] text-ink outline-none placeholder:text-muted sm:w-48" /></label>}
+      </div>
+      {list.length === 0
+        ? <div className="flex flex-col items-center py-14 text-center text-muted"><Lightbulb className="size-6" /><p className="mt-3 text-[14px]">{all.length === 0 ? "Nothing yet. Type something above." : "Nothing matches."}</p></div>
+        : <ul className="divide-y divide-hairline">{list.map((i) => <IdeaRow key={i.id} idea={i} />)}</ul>}
+    </div>
+  );
+}
 
 export function IdeaVault() {
-  const s = useHub();
-  const f = useFilters();
-  const [sort, setSort] = useState("newest");
-  const [quick, setQuick] = useState("");
-  const all = ideas(s.items);
-  const list = applyFilters(s, all, f.filters).sort((a, b) => sort === "priority" ? PRIORITY_META[a.priority].rank - PRIORITY_META[b.priority].rank || b.createdAt.localeCompare(a.createdAt) : sort === "title" ? a.title.localeCompare(b.title) : b.createdAt.localeCompare(a.createdAt));
-
-  const capture = () => {
-    const title = quick.trim();
-    if (!title) return;
-    hub.addItem({ title, pillarId: f.filters.pillar || undefined });
-    setQuick(""); toast.success("Idea captured", { description: title });
-  };
-
   return (
-    <div className="mx-auto max-w-7xl">
-      <PageHeader title="Content Ideas" subtitle="Capture ideas now. Turn them into content later."
-        actions={<Button onClick={() => uiActions.openIdea()}><Plus />New Idea</Button>} />
-
-      <form onSubmit={(e) => { e.preventDefault(); capture(); }} className="mb-5 flex items-center gap-2 rounded-xl border border-hairline bg-wash/60 p-2">
-        <Lightbulb className="ml-2 size-4 shrink-0 text-bronze" />
-        <Input value={quick} onChange={(e) => setQuick(e.target.value)} placeholder="Quick capture: type an idea and press Enter. Add the details later." aria-label="Quick capture an idea" className="border-transparent bg-transparent focus:border-transparent focus:ring-0" />
-        <Button type="submit" variant="subtle" disabled={!quick.trim()}>Capture</Button>
-      </form>
-
-      <FilterBar state={s} {...f} hide={["status", "date", "assignee"]} placeholder="Search ideas…" count={`${list.length} of ${all.length} ideas`} />
-      <div className="mb-4 -mt-1 flex items-center gap-2 text-[12.5px] text-muted"><label htmlFor="sort">Sort by</label>
-        <Select id="sort" value={sort} onChange={(e) => setSort(e.target.value)} className="h-8 w-auto py-0 text-[12.5px] font-bold"><option value="newest">Newest</option><option value="priority">Priority</option><option value="title">Title A–Z</option></Select></div>
-
-      {all.length === 0 ? <EmptyState icon={Lightbulb} title="Your next great content idea starts here." text="Jot down anything. You can organise it later." action="+ Add Idea" onAction={() => uiActions.openIdea()} />
-        : list.length === 0 ? <EmptyState compact icon={Lightbulb} title="No ideas match these filters" action="Clear filters" onAction={f.clear} />
-        : <div className="cz-stagger grid gap-3 md:grid-cols-2 xl:grid-cols-3">{list.map((i) => <IdeaCard key={i.id} idea={i} state={s} />)}</div>}
+    <div className="mx-auto max-w-2xl">
+      <PageHeader title="Ideas & hooks" subtitle="Everything you've jotted down." />
+      <div className="mb-8"><Capture /></div>
+      <IdeaStream showTools />
     </div>
   );
 }

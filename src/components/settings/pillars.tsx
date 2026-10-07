@@ -57,7 +57,7 @@ export function PillarsSection() {
                   <Button variant="danger-ghost" aria-label={`Delete ${p.name}`} disabled={pillars.length < 2} title={pillars.length < 2 ? "At least one pillar is required" : undefined} onClick={() => setDel(p)}><Trash2 /></Button>
                 </div>
               </div>
-              <div className="mt-2 flex flex-wrap gap-1.5">{p.topics.length ? p.topics.map((t) => <span key={t} className="rounded-md bg-wash px-2 py-0.5 text-[12px] font-bold text-muted ring-1 ring-inset ring-hairline">{t}</span>) : <span className="text-[12.5px] text-muted">No topics</span>}</div>
+              <div className="mt-2 flex flex-wrap gap-1.5">{p.topics.length ? p.topics.map((t) => <span key={t} className="rounded-md bg-wash px-2 py-0.5 text-[12px] font-bold text-muted">{t}</span>) : <span className="text-[12.5px] text-muted">No topics</span>}</div>
             </li>
           ))}
         </ul>

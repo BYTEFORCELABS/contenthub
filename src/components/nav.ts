@@ -1,20 +1,16 @@
-import { BarChart3, CalendarDays, FolderKanban, Images, Lightbulb, type LucideIcon, Megaphone, Settings, LayoutDashboard, Rows3 } from "lucide-react";
+import { CalendarDays, FolderKanban, Images, Lightbulb, type LucideIcon, Settings, LayoutDashboard } from "lucide-react";
 
 export type NavItem = { href: string; label: string; icon: LucideIcon };
 export type NavGroup = { key: string; label?: string; items: NavItem[] };
 
+/** Kept deliberately small. All Content, Campaigns and Analytics still exist at their URLs, just not in the way. */
 export const NAV: NavGroup[] = [
-  { key: "main", items: [{ href: "/", label: "Dashboard", icon: LayoutDashboard }] },
-  { key: "content", label: "Content", items: [
-    { href: "/content", label: "All Content", icon: Rows3 },
+  { key: "main", items: [
+    { href: "/", label: "Home", icon: LayoutDashboard },
     { href: "/board", label: "Content Board", icon: FolderKanban },
-    { href: "/ideas", label: "Ideas", icon: Lightbulb },
+    { href: "/ideas", label: "Ideas & hooks", icon: Lightbulb },
     { href: "/calendar", label: "Calendar", icon: CalendarDays },
-  ] },
-  { key: "plan", items: [
-    { href: "/campaigns", label: "Campaigns", icon: Megaphone },
-    { href: "/library", label: "Content Library", icon: Images },
-    { href: "/analytics", label: "Analytics", icon: BarChart3 },
+    { href: "/library", label: "Library", icon: Images },
     { href: "/settings", label: "Settings", icon: Settings },
   ] },
 ];

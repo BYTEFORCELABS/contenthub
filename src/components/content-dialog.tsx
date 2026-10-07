@@ -108,7 +108,7 @@ function Form({ mode, defaults }: { mode: "idea" | "content"; defaults?: Partial
         </>}
         <Field label="Tags" className="sm:col-span-2" hint="Press Enter or comma to add a tag.">
           <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-hairline-strong px-2 py-1.5 focus-within:border-deep focus-within:ring-3 focus-within:ring-deep/15">
-            {tags.map((t) => <button key={t} type="button" onClick={() => setTags(tags.filter((x) => x !== t))} className="rounded-md bg-wash px-1.5 py-0.5 text-[12px] font-bold text-muted ring-1 ring-inset ring-hairline hover:text-status-overdue" aria-label={`Remove tag ${t}`}>#{t} ×</button>)}
+            {tags.map((t) => <button key={t} type="button" onClick={() => setTags(tags.filter((x) => x !== t))} className="rounded-md bg-wash px-1.5 py-0.5 text-[12px] font-bold text-muted hover:text-status-overdue" aria-label={`Remove tag ${t}`}>#{t} ×</button>)}
             <input value={tagText} onChange={(e) => setTagText(e.target.value)} onBlur={addTag}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(); } else if (e.key === "Backspace" && !tagText) setTags(tags.slice(0, -1)); }}
               placeholder={tags.length ? "" : "website, tips…"} className="h-6 min-w-24 flex-1 bg-transparent text-[14px] outline-none placeholder:text-muted/60" />

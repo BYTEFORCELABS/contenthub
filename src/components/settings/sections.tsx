@@ -1,13 +1,11 @@
 "use client";
-import { useState } from "react";
-import { Check, Download, RotateCcw } from "lucide-react";
+import { Check, Download } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/avatar";
 import { StatusBadge } from "@/components/badges";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { CHECKLIST_TEMPLATE, STATUS_META } from "@/lib/meta";
-import { hub, useHub } from "@/lib/store";
+import { useHub } from "@/lib/store";
 import { STATUSES } from "@/lib/types";
 
 const Note = ({ children }: { children: React.ReactNode }) => <p className="rounded-xl bg-wash px-4 py-3 text-[13px] text-muted">{children}</p>;
@@ -58,7 +56,6 @@ export function AppearanceSection() {
 
 export function DataSection() {
   const state = useHub();
-  const [confirm, setConfirm] = useState(false);
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -70,17 +67,11 @@ export function DataSection() {
   };
   return (
     <div className="space-y-4">
-      <Note>All data lives in this browser only. It is not synced, backed up or shared with teammates until the backend arrives. Clearing site data removes it.</Note>
+      <Note>Everything is saved to your Content Hub database as you work, so it is the same on every device. Export a copy any time.</Note>
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline p-4">
         <div><div className="text-[14px] font-bold text-ink">Export JSON</div><div className="text-[13px] text-muted">Download everything: content, campaigns, pillars, assets and activity.</div></div>
         <Button variant="outline" onClick={exportJson}><Download />Export JSON</Button>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline p-4">
-        <div><div className="text-[14px] font-bold text-ink">Reset demo data</div><div className="text-[13px] text-muted">Replace everything with the original sample content. Cannot be undone.</div></div>
-        <Button variant="danger-ghost" onClick={() => setConfirm(true)}><RotateCcw />Reset demo data</Button>
-      </div>
-      <Dialog open={confirm} onOpenChange={setConfirm} title="Reset demo data?" description="Your changes in this browser will be replaced by the original sample content. Export first if you want to keep a copy."
-        footer={<><Button variant="ghost" onClick={() => setConfirm(false)}>Cancel</Button><Button variant="danger" onClick={() => { hub.reset(); setConfirm(false); toast.success("Demo data restored"); }}>Reset</Button></>} />
     </div>
   );
 }

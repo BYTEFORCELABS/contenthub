@@ -1,57 +1,71 @@
 "use client";
-import { useSyncExternalStore } from "react";
+import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
+import { toast } from "sonner";
 import { addDays, today } from "./dates";
 import { CHECKLIST_TEMPLATE, STAGE_DONE, STATUS_META } from "./meta";
-import { seedState } from "./seed";
+import { persist } from "./persist";
+import { TABLES, type Changes } from "./tables";
 import type { Asset, Campaign, ContentItem, HubState, Pillar, Platform, Status } from "./types";
 
 /**
- * Frontend-only store. Everything the UI changes goes through the functions in `hub`,
- * so a real backend can replace this module without touching any component.
- * State persists in localStorage until then.
+ * The app's data. The server loads it from Supabase on each page load and hands it to HubProvider.
+ * Components read it with useHub() and change it only through `hub`: changes show instantly,
+ * then the rows that changed are saved to the database in order (see `save`).
  */
-const KEY = "cyberzik-contenthub-v1";
-const SEED = seedState();
-let state: HubState = SEED;
-let loaded = false;
+const EMPTY: HubState = { items: [], campaigns: [], pillars: [], assets: [], activity: [], people: [] };
+let state: HubState = EMPTY;
 const subs = new Set<() => void>();
 
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 8)}`;
 const nowIso = () => new Date().toISOString();
 
-function load() {
-  if (loaded || typeof window === "undefined") return;
-  loaded = true;
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) state = JSON.parse(raw) as HubState;
-  } catch { /* private mode or corrupt data: fall back to the seed */ }
+/** Rows that differ between two states, by id, per table. */
+function diff(prev: HubState, next: HubState): Changes {
+  const out: Changes = {};
+  for (const t of TABLES) {
+    const before = new Map<string, unknown>((prev[t] as { id: string }[]).map((r) => [r.id, r]));
+    const rows = next[t] as { id: string }[];
+    const upsert = rows.filter((r) => before.get(r.id) !== r);
+    const keep = new Set(rows.map((r) => r.id));
+    const remove = [...before.keys()].filter((id) => !keep.has(id));
+    if (upsert.length || remove.length) out[t] = { upsert, remove };
+  }
+  return out;
 }
+
+let queue: Promise<unknown> = Promise.resolve();
+function save(changes: Changes) {
+  if (!Object.keys(changes).length) return;
+  queue = queue.then(() => persist(changes)).then((r) => {
+    if (!r.ok) toast.error("Couldn't save your last change", { description: r.error });
+  }, () => { toast.error("Couldn't reach the database", { description: "Your last change may not be saved. Check your connection." }); });
+}
+
 function commit(next: HubState) {
+  const prev = state;
   state = next;
-  try { localStorage.setItem(KEY, JSON.stringify(next)); } catch { /* storage unavailable; state still lives in memory */ }
+  save(diff(prev, next));
   subs.forEach((f) => f());
 }
 const log = (s: HubState, text: string, ref: { itemId?: string; campaignId?: string } = {}): HubState => ({
   ...s, activity: [{ id: uid("a"), text, at: nowIso(), ...ref }, ...s.activity].slice(0, 60),
 });
 
-function subscribe(cb: () => void) {
-  load();
-  subs.add(cb);
-  const onStorage = (e: StorageEvent) => {
-    if (e.key !== KEY || !e.newValue) return;
-    try { state = JSON.parse(e.newValue); subs.forEach((f) => f()); } catch { /* ignore */ }
-  };
-  window.addEventListener("storage", onStorage);
-  return () => { subs.delete(cb); window.removeEventListener("storage", onStorage); };
+function subscribe(cb: () => void) { subs.add(cb); return () => { subs.delete(cb); }; }
+const getSnapshot = () => state;
+
+const Ctx = createContext<HubState>(EMPTY);
+
+/** Puts the server's data into the store before anything renders (browser only; the server never holds shared state). */
+export function HubProvider({ initial, children }: { initial: HubState; children: ReactNode }) {
+  const [seeded] = useState(() => { if (typeof window !== "undefined" && state === EMPTY) state = initial; return initial; });
+  return <Ctx.Provider value={seeded}>{children}</Ctx.Provider>;
 }
-const getSnapshot = () => { load(); return state; };
-const getServerSnapshot = () => SEED;
 
 /** Subscribe to the whole hub. Select derived data with plain code or the helpers in select.ts. */
 export function useHub(): HubState {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const initial = useContext(Ctx);
+  return useSyncExternalStore(subscribe, getSnapshot, () => initial);
 }
 
 export type NewItem = Partial<Omit<ContentItem, "id" | "createdAt" | "updatedAt">> & { title: string };
@@ -127,5 +141,4 @@ export const hub = {
     if (!rest.length) return;
     commit({ ...state, pillars: rest, items: state.items.map((i) => (i.pillarId === id ? { ...i, pillarId: rest[0].id } : i)) });
   },
-  reset() { commit(seedState()); },
 };

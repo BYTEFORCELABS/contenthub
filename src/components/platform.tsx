@@ -23,7 +23,7 @@ export function PlatformGlyph({ platform, className }: { platform: Platform; cla
 export function PlatformBadge({ platform, label = true, className }: { platform: Platform; label?: boolean; className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-1.5 text-[12px] font-bold text-ink/80", className)} title={PLATFORM_META[platform].label}>
-      <span className="grid size-5 place-items-center rounded-md bg-wash-strong text-deep"><PlatformGlyph platform={platform} className="size-3.5" /></span>
+      <span className="grid size-5 place-items-center rounded-md bg-wash-strong text-muted"><PlatformGlyph platform={platform} className="size-3.5" /></span>
       {label && PLATFORM_META[platform].label}
     </span>
   );
@@ -35,7 +35,7 @@ export function PlatformStack({ platforms, max = 3 }: { platforms: Platform[]; m
   return (
     <span className="inline-flex items-center" aria-label={platforms.map((p) => PLATFORM_META[p].label).join(", ")}>
       {platforms.slice(0, max).map((p) => (
-        <span key={p} title={PLATFORM_META[p].label} className="-ml-1 grid size-6 place-items-center rounded-full bg-wash-strong text-deep ring-2 ring-page first:ml-0"><PlatformGlyph platform={p} className="size-3.5" /></span>
+        <span key={p} title={PLATFORM_META[p].label} className="-ml-1 grid size-6 place-items-center rounded-full bg-wash-strong text-muted ring-2 ring-page first:ml-0"><PlatformGlyph platform={p} className="size-3.5" /></span>
       ))}
       {platforms.length > max && <span className="-ml-1 grid size-6 place-items-center rounded-full bg-deep text-[10px] font-bold text-cream ring-2 ring-page">+{platforms.length - max}</span>}
     </span>

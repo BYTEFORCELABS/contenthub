@@ -75,7 +75,7 @@ export default function LibraryPage() {
         <div className="mb-4 flex flex-wrap gap-1.5" role="group" aria-label="Filter by tag">
           {allTags.map((t) => (
             <button key={t} aria-pressed={tags.includes(t)} onClick={() => toggleTag(t)}
-              className={cn("rounded-md px-2 py-0.5 text-[12px] font-bold ring-1 ring-inset transition-colors", tags.includes(t) ? "bg-deep text-cream ring-deep" : "bg-wash text-muted ring-hairline hover:text-ink")}>#{t}</button>
+              className={cn("rounded-md px-2 py-0.5 text-[12px] font-bold transition-colors", tags.includes(t) ? "bg-deep text-cream" : "bg-wash text-muted hover:text-ink")}>#{t}</button>
           ))}
           {tags.length > 0 && <button onClick={() => setTags([])} className="px-1 text-[12px] font-bold text-bronze hover:underline">Clear tags</button>}
         </div>
