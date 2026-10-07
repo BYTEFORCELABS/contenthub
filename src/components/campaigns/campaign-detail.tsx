@@ -27,6 +27,7 @@ export function CampaignDetail({ id }: { id: string }) {
   const ready = useSyncExternalStore(noop, () => true, () => false);
   const [dlg, setDlg] = useState<null | "edit" | "delete" | "add">(null);
   const [leaving, setLeaving] = useState(false);
+  const [withContent, setWithContent] = useState(false);
   const campaign = byId(state.campaigns, id);
 
   if (leaving) return null;
@@ -87,10 +88,17 @@ export function CampaignDetail({ id }: { id: string }) {
       <CampaignFormDialog open={dlg === "edit"} onOpenChange={(o) => setDlg(o ? "edit" : null)} initial={campaign} title="Edit campaign" submitLabel="Save changes"
         onSubmit={(d) => { hub.updateCampaign(id, d); toast.success("Campaign updated"); setDlg(null); }} />
       <AddContentDialog campaign={campaign} open={dlg === "add"} onOpenChange={(o) => setDlg(o ? "add" : null)} />
-      <Dialog open={dlg === "delete"} onOpenChange={(o) => setDlg(o ? "delete" : null)} title="Delete this campaign?"
-        description={`"${campaign.name}" will be removed. Its ${items.length} piece${items.length === 1 ? "" : "s"} of content stay in the hub, just without a campaign.`}
+      <Dialog open={dlg === "delete"} onOpenChange={(o) => { setDlg(o ? "delete" : null); if (!o) setWithContent(false); }} title="Delete this campaign?"
+        description={withContent ? `"${campaign.name}" and its ${items.length} piece${items.length === 1 ? "" : "s"} of content will be removed permanently.` : `"${campaign.name}" will be removed. Its ${items.length} piece${items.length === 1 ? "" : "s"} of content stay in the hub, just without a campaign.`}
         footer={<><Button variant="ghost" onClick={() => setDlg(null)}>Cancel</Button>
-          <Button variant="danger" onClick={() => { setLeaving(true); router.push("/campaigns"); hub.deleteCampaign(id); toast.success("Campaign deleted"); }}><Trash2 />Delete campaign</Button></>} />
+          <Button variant="danger" onClick={() => { setLeaving(true); router.push("/campaigns"); hub.deleteCampaign(id, withContent); toast.success(withContent ? "Campaign and its content deleted" : "Campaign deleted"); }}><Trash2 />{withContent ? "Delete everything" : "Delete campaign"}</Button></>}>
+        {items.length > 0 && (
+          <label className="flex cursor-pointer items-start gap-2.5 text-[13.5px] text-ink">
+            <input type="checkbox" checked={withContent} onChange={(e) => setWithContent(e.target.checked)} className="mt-0.5 size-4 accent-[var(--brand-deep)]" />
+            <span>Also delete its {items.length} piece{items.length === 1 ? "" : "s"} of content<span className="block text-[12.5px] text-muted">This can&apos;t be undone.</span></span>
+          </label>
+        )}
+      </Dialog>
     </div>
   );
 }

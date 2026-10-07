@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { addDays, today } from "./dates";
 import { CHECKLIST_TEMPLATE, STAGE_DONE, STATUS_META } from "./meta";
 import { persist } from "./persist";
-import { TABLES, type Changes } from "./tables";
+import { diff, type Changes } from "./tables";
 import type { Asset, Campaign, ContentItem, HubState, Pillar, Platform, Status } from "./types";
 
 /**
@@ -18,20 +18,6 @@ const subs = new Set<() => void>();
 
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 8)}`;
 const nowIso = () => new Date().toISOString();
-
-/** Rows that differ between two states, by id, per table. */
-function diff(prev: HubState, next: HubState): Changes {
-  const out: Changes = {};
-  for (const t of TABLES) {
-    const before = new Map<string, unknown>((prev[t] as { id: string }[]).map((r) => [r.id, r]));
-    const rows = next[t] as { id: string }[];
-    const upsert = rows.filter((r) => before.get(r.id) !== r);
-    const keep = new Set(rows.map((r) => r.id));
-    const remove = [...before.keys()].filter((id) => !keep.has(id));
-    if (upsert.length || remove.length) out[t] = { upsert, remove };
-  }
-  return out;
-}
 
 let queue: Promise<unknown> = Promise.resolve();
 function save(changes: Changes) {
@@ -123,8 +109,10 @@ export const hub = {
     return c;
   },
   updateCampaign(id: string, patch: Partial<Campaign>) { commit({ ...state, campaigns: state.campaigns.map((c) => (c.id === id ? { ...c, ...patch } : c)) }); },
-  deleteCampaign(id: string) {
-    commit({ ...state, campaigns: state.campaigns.filter((c) => c.id !== id), items: state.items.map((i) => (i.campaignId === id ? { ...i, campaignId: null } : i)) });
+  /** By default its content stays, just without a campaign. With `withContent`, the content is deleted too. */
+  deleteCampaign(id: string, withContent = false) {
+    commit({ ...state, campaigns: state.campaigns.filter((c) => c.id !== id),
+      items: withContent ? state.items.filter((i) => i.campaignId !== id) : state.items.map((i) => (i.campaignId === id ? { ...i, campaignId: null } : i)) });
   },
   addAsset(p: Omit<Asset, "id" | "addedAt">): Asset {
     const a = { ...p, id: uid("as"), addedAt: nowIso() };
