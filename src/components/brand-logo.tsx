@@ -14,7 +14,7 @@ export function BrandLogo({ width, priority }: { width: number; priority?: boole
   const a = full ? FULL : MARK;
   const clear = Math.ceil(width * (full ? 0.085 : 0.1));
   return (
-    <span style={{ padding: clear, display: "inline-block", lineHeight: 0 }}>
+    <span className="cz-logo" style={{ padding: clear, display: "inline-block", lineHeight: 0 }}>
       {/* unoptimized: serve the supplied PNG byte-for-byte, never re-encoded. */}
       <Image src={a.src} alt="CYBERZIK Technologies" width={a.w} height={a.h} unoptimized
         style={{ objectFit: "contain", width, height: "auto" }} priority={priority} />

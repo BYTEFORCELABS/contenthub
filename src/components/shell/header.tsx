@@ -7,6 +7,7 @@ import { LogOut, Menu, Search, Settings, X } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { BrandLogo } from "@/components/brand-logo";
 import { NavList, ProductMark } from "@/components/shell/sidebar";
+import { ThemeToggle } from "@/components/shell/theme";
 import { uiActions } from "@/lib/ui";
 import { signOut } from "@/app/login/actions";
 
@@ -16,7 +17,7 @@ function MobileNav() {
     <D.Root open={open} onOpenChange={setOpen}>
       <D.Trigger aria-label="Open menu" className="grid size-9 place-items-center rounded-lg text-ink hover:bg-wash-strong lg:hidden"><Menu className="size-5" /></D.Trigger>
       <D.Portal>
-        <D.Overlay className="cz-overlay fixed inset-0 z-50 bg-ink/30 backdrop-blur-[2px]" />
+        <D.Overlay className="cz-overlay fixed inset-0 z-50 bg-overlay backdrop-blur-[2px]" />
         <D.Content aria-describedby={undefined} className="cz-drawer fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-page shadow-xl focus:outline-none">
           <D.Title className="sr-only">Navigation</D.Title>
           <div className="flex items-start justify-between pl-3 pr-2 pt-2"><div><BrandLogo width={132} /><ProductMark /></div><D.Close aria-label="Close menu" className="grid size-8 place-items-center rounded-lg text-muted hover:bg-wash-strong"><X className="size-4" /></D.Close></div>
@@ -53,7 +54,7 @@ export function Header() {
       <button type="button" onClick={() => uiActions.setSearch(true)} aria-label="Search" className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg bg-wash px-3 text-left text-[13.5px] text-muted transition-colors hover:bg-wash-strong sm:max-w-md sm:flex-none sm:basis-96">
         <Search className="size-4 shrink-0" /><span className="flex-1 truncate">Search content, ideas, campaigns…</span><kbd className="hidden rounded border border-hairline-strong px-1.5 text-[11px] sm:block">⌘K</kbd>
       </button>
-      <div className="ml-auto flex items-center gap-1.5 sm:gap-2"><Profile /></div>
+      <div className="ml-auto flex items-center gap-1.5 sm:gap-2"><ThemeToggle /><Profile /></div>
     </header>
   );
 }

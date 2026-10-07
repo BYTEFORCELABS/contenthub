@@ -45,7 +45,7 @@ export function ContentBoard() {
       </div>
       <D.Root open={!!openId} onOpenChange={(o) => !o && setOpenId(null)}>
         <D.Portal>
-          <D.Overlay className="cz-overlay fixed inset-0 z-40 bg-ink/35 backdrop-blur-[2px]" />
+          <D.Overlay className="cz-overlay fixed inset-0 z-40 bg-overlay backdrop-blur-[2px]" />
           <D.Content aria-describedby={undefined} className="cz-dialog fixed inset-x-2 bottom-2 top-2 z-40 mx-auto flex max-w-6xl flex-col overflow-hidden rounded-2xl border border-hairline bg-page shadow-[0_24px_64px_-12px_rgb(36_26_18/0.35)] focus:outline-none sm:inset-y-5">
             <D.Title className="sr-only">Content workspace</D.Title>
             <D.Close aria-label="Close" className="absolute right-3 top-3 z-10 grid size-8 place-items-center rounded-lg text-muted hover:bg-wash hover:text-ink"><X className="size-4" /></D.Close>

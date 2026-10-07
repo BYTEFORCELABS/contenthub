@@ -41,7 +41,7 @@ export function CommandSearch() {
   return (
     <D.Root open={search} onOpenChange={(o) => { uiActions.setSearch(o); if (!o) setQ(""); }}>
       <D.Portal>
-        <D.Overlay className="cz-overlay fixed inset-0 z-50 bg-ink/30 backdrop-blur-[2px]" />
+        <D.Overlay className="cz-overlay fixed inset-0 z-50 bg-overlay backdrop-blur-[2px]" />
         <D.Content aria-describedby={undefined} className="cz-dialog fixed left-1/2 top-[8vh] z-50 w-[calc(100vw-24px)] max-w-xl -translate-x-1/2 overflow-hidden rounded-2xl border border-hairline bg-page shadow-[0_24px_64px_-12px_rgb(36_26_18/0.3)] focus:outline-none">
           <D.Title className="sr-only">Search Content Hub</D.Title>
           <Command shouldFilter={false} label="Search" loop>

@@ -19,7 +19,9 @@
 /*
  * CYBERZIK brand tokens (Brand Guidelines v1.0, 5 Sep 2026).
  * The only brand colours. Components use these names, never raw hex.
- * Light theme only, as in the Ledger (dark mode deferred until the cream-on-deep-brown lockup exists).
+ * Light is the default. Dark redefines the same names below, so components never branch on theme.
+ * In dark, "deep" becomes a light tan (for text and primary buttons) and "cream" the dark brown that sits on it.
+ * The logo is never filtered: in dark it sits on a white tile (see .cz-logo).
  */
 :root {
   --brand-deep: #5e2b00;
@@ -32,6 +34,8 @@
   --page: #ffffff;
   --hairline: rgb(31 27 24 / 0.08);
   --hairline-strong: rgb(31 27 24 / 0.16);
+  --overlay: rgb(31 27 24 / 0.32);
+  color-scheme: light;
 
   /* PROVISIONAL functional status colours, pending owner approval.
      Badges, alerts and chart semantics only. Always with text and an icon. */
@@ -51,6 +55,33 @@
   --font-ui: Futura, "Futura PT", Jost, "Century Gothic", "Trebuchet MS", Arial, sans-serif;
 }
 
+/* Dark theme: chosen by the toggle, or by the device when nothing is chosen (see ThemeScript). */
+:root[data-theme="dark"] {
+  --brand-deep: #e8b988;
+  --brand-bronze: #d49a62;
+  --brand-cream: #2a1500;
+  --ink: #f1eeea;
+  --muted: #a8a19a;
+  --wash: #1b1917;
+  --wash-strong: #272422;
+  --page: #131110;
+  --hairline: rgb(255 255 255 / 0.09);
+  --hairline-strong: rgb(255 255 255 / 0.18);
+  --overlay: rgb(0 0 0 / 0.6);
+  --status-paid: #96bf72;
+  --status-pending: #d9b45c;
+  --status-overdue: #ec8670;
+  --status-reconciled: #86b6c2;
+  --status-flagged: #dc916c;
+  --status-draft: #a8a19a;
+  --status-void: #9a948e;
+  --chart-1: #e8b988;
+  --chart-2: #a8703a;
+  color-scheme: dark;
+}
+/* The logo is brown on transparent, so in dark it keeps a white tile behind it rather than being recoloured. */
+:root[data-theme="dark"] .cz-logo { background: #ffffff; border-radius: 14px; }
+
 @theme inline {
   --color-deep: var(--brand-deep);
   --color-bronze: var(--brand-bronze);
@@ -62,6 +93,7 @@
   --color-page: var(--page);
   --color-hairline: var(--hairline);
   --color-hairline-strong: var(--hairline-strong);
+  --color-overlay: var(--overlay);
   --color-status-paid: var(--status-paid);
   --color-status-pending: var(--status-pending);
   --color-status-overdue: var(--status-overdue);
@@ -76,6 +108,7 @@
 
 html, body {
   background: var(--page);
+  transition: background-color 200ms ease, color 200ms ease;
   color: var(--ink);
   font-family: var(--font-ui);
 }
