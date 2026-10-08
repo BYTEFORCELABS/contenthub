@@ -21,7 +21,7 @@
  * The only brand colours. Components use these names, never raw hex.
  * Light is the default. Dark redefines the same names below, so components never branch on theme.
  * In dark, "deep" becomes a light tan (for text and primary buttons) and "cream" the dark brown that sits on it.
- * The logo is never filtered: in dark it sits on a white tile (see .cz-logo).
+ * The logo is never filtered: in dark the full lockup swaps to the supplied cream file (see .cz-logo-dark).
  */
 :root {
   --brand-deep: #5e2b00;
@@ -79,7 +79,10 @@
   --chart-2: #a8703a;
   color-scheme: dark;
 }
-/* The logo is brown on transparent, so in dark it keeps a white tile behind it rather than being recoloured. */
+/* Logo: the full lockup swaps to the supplied cream file in dark. The mark has no cream file yet, so it keeps a white tile. */
+.cz-logo-dark { display: none; }
+:root[data-theme="dark"] .cz-logo-light { display: none; }
+:root[data-theme="dark"] .cz-logo-dark { display: inline; }
 :root[data-theme="dark"] .cz-logo { background: #ffffff; border-radius: 14px; }
 
 @theme inline {
